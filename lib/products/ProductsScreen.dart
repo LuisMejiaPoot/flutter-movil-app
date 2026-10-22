@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_api/products/Product.dart';
+import 'package:flutter_application_api/product_by_id/ProductByIdScreen.dart';
+import 'package:flutter_application_api/product_by_id/ProductByIdService.dart';
 import 'package:flutter_application_api/products/ProductsService.dart';
 
 class ProductsScreen extends StatefulWidget {
   final ProductsService productsService;
+  final ProductByIdService productByIdService;
 
-  const ProductsScreen({super.key, required this.productsService});
+  const ProductsScreen({
+    super.key,
+    required this.productsService,
+    required this.productByIdService,
+  });
 
   @override
   State<ProductsScreen> createState() => _ProductsScreenState();
@@ -29,7 +36,24 @@ class _ProductsScreenState extends State<ProductsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Productos')),
+      appBar: AppBar(
+        title: const Text('Productos'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            tooltip: 'Buscar por ID',
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ProductByIdScreen(
+                    productByIdService: widget.productByIdService,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: FutureBuilder<List<Product>>(
         future: _productsFuture,
         builder: (context, snapshot) {
@@ -58,6 +82,16 @@ class _ProductsScreenState extends State<ProductsScreen> {
               return ListTile(
                 title: Text(product.title),
                 subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ProductByIdScreen(
+                        productByIdService: widget.productByIdService,
+                        initialId: product.id,
+                      ),
+                    ),
+                  );
+                },
               );
             },
           );

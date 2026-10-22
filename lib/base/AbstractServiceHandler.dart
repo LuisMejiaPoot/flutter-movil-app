@@ -6,7 +6,7 @@ abstract class AbstractServiceHandler<U, T> implements Handler<U, T> {
   Future<T> execute(U input) async {
     try {
       // Lógica principal delegada al método abstracto doExecute
-      final T result = doExecute(input);
+      final T result = await doExecute(input);
       return result;
     } on CustomException catch (e) {
       // Se re-lanza la excepción personalizada tal como en Java
@@ -19,5 +19,5 @@ abstract class AbstractServiceHandler<U, T> implements Handler<U, T> {
   }
 
   // Método abstracto que las clases hijas deben implementar
-  T doExecute(U input);
+  Future<T> doExecute(U input);
 }

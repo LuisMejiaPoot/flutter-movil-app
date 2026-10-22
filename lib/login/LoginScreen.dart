@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_api/login/LoginService.dart';
+import 'package:flutter_application_api/product_by_id/ProductByIdService.dart';
 import 'package:flutter_application_api/products/ProductsScreen.dart';
 import 'package:flutter_application_api/products/ProductsService.dart';
 
 class LoginScreen extends StatefulWidget {
   final LoginService loginService;
   final ProductsService productsService;
+  final ProductByIdService productByIdService;
 
   const LoginScreen({
     super.key,
     required this.loginService,
     required this.productsService,
+    required this.productByIdService,
   });
 
   @override
@@ -49,7 +52,10 @@ class _LoginScreenState extends State<LoginScreen> {
       // Login correcto: reemplaza la pantalla de login por la de productos
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => ProductsScreen(productsService: widget.productsService),
+          builder: (_) => ProductsScreen(
+            productsService: widget.productsService,
+            productByIdService: widget.productByIdService,
+          ),
         ),
       );
     } catch (_) {
